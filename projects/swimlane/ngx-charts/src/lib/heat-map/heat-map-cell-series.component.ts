@@ -50,7 +50,19 @@ interface Cell {
       [tooltipTitle]="tooltipTemplate ? undefined : tooltipText(c)"
       [tooltipTemplate]="tooltipTemplate"
       [tooltipContext]="{ series: c.series, name: c.label, value: c.data }"
-    ></svg:g>
+    >
+      <text *ngIf="showDataLabel"
+        [attr.x]="c.x + c.width / 2"
+        [attr.y]="c.y + c.height / 2"
+        text-anchor="middle"
+        alignment-baseline="central"
+        fill="white"
+        font-size="10px"
+        pointer-events="none"
+      >
+        {{ c.data }}
+      </text>
+    </svg:g>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
@@ -65,6 +77,7 @@ export class HeatCellSeriesComponent implements OnChanges, OnInit {
   @Input() tooltipText: any;
   @Input() tooltipTemplate: TemplateRef<any>;
   @Input() animations: boolean = true;
+  @Input() showDataLabel: boolean = false;
 
   @Output() select: EventEmitter<DataItem> = new EventEmitter();
   @Output() activate: EventEmitter<DataItem> = new EventEmitter();
